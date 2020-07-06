@@ -15,7 +15,7 @@ load('senatorTweet_data/rinputs.Rdata')
 dw_mat <- convert(senTweets116_2020.dfm_trimmed,to="matrix")
 rm(senTweets116_2020.dfm_trimmed)
 
-n <- 2000 #nrow(dw_mat)
+n <- 20000
 dw_mat <- dw_mat[1:n,]
 senators <- senators[1:n]
 print(n)
