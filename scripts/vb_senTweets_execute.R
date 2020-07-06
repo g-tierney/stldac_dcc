@@ -18,7 +18,7 @@ rm(senTweets116_2020.dfm_trimmed)
 n <- nrow(dw_mat) #9000 
 dw_mat <- dw_mat[1:n,]
 senators <- senators[1:n]
-nCores <- min(1,parallel::detectCores(),length(unique(senators)))
+nCores <- min(4,parallel::detectCores(),length(unique(senators)))
 
 print(n)
 print(nCores)
