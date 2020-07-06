@@ -16,7 +16,7 @@ dw_mat <- convert(senTweets116_2020.dfm_trimmed,to="matrix")
 rm(senTweets116_2020.dfm_trimmed)
 
 n <- 9000
-nCores <- 4 #parallel::detectCores()
+nCores <- 40 #parallel::detectCores()
 dw_mat <- dw_mat[1:n,]
 senators <- senators[1:n]
 print(n)
