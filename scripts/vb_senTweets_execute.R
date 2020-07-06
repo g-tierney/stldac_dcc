@@ -15,10 +15,12 @@ load('senatorTweet_data/rinputs.Rdata')
 dw_mat <- convert(senTweets116_2020.dfm_trimmed,to="matrix")
 rm(senTweets116_2020.dfm_trimmed)
 
-n <- 20000
+n <- 9000
+nCores <- 4 #parallel::detectCores()
 dw_mat <- dw_mat[1:n,]
 senators <- senators[1:n]
 print(n)
+print(nCores)
 
-x <- stldac_vb(users=senators,dw=dw_mat,nT = 10,nC = 4,tol = .01,seed = 1,maxiter = 2,n.cores=4)
+x <- stldac_vb(users=senators,dw=dw_mat,nT = 10,nC = 4,tol = .01,seed = 1,maxiter = 2,n.cores=nCores)
 saveRDS(x,file = "senatorTweet_data/vb_4C_30T_test.rds")
