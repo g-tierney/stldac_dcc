@@ -109,7 +109,7 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
       #NEW: do every round
       loglike_new <- elbo(alpha_mat = alpha_mat,beta_mat = beta_mat,xi = xi,
                           lambda_mat = lambda_mat,phi_mat = phi_mat,gamma_mat = gamma_mat,
-                          W_mat = dw,users_list = users)
+                          W_mat = dw,users_list = users,n.cores = n.cores)
       print(str_c("ll: ",loglike_new,", delta: ",exp(loglike_new-loglike_old)))
       if(i>5&(exp(loglike_new-loglike_old)<1+tol)) converged <- TRUE
     }
