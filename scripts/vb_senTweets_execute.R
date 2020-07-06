@@ -15,10 +15,11 @@ load('senatorTweet_data/rinputs.Rdata')
 dw_mat <- convert(senTweets116_2020.dfm_trimmed,to="matrix")
 rm(senTweets116_2020.dfm_trimmed)
 
-n <- 9000
-nCores <- 40 #parallel::detectCores()
+n <- nrow(dw_mat) #9000 
 dw_mat <- dw_mat[1:n,]
 senators <- senators[1:n]
+nCores <- min(1,parallel::detectCores(),length(unique(senators)))
+
 print(n)
 print(nCores)
 
