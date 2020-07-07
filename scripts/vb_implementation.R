@@ -119,7 +119,7 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
     end <- Sys.time()
   }
   (end-start)/(i-1)
-  print(str_c("Time elapsed: ",round(end-start,2),", iterations completed: ",i-1))
+  print(str_c(capture.output(round(end-start,2)),", iterations completed: ",i-1))
   #phi_mat %>% apply(1,which.max) %>% table(ta_true)
   #lambda_mat %>% apply(1,which.max) %>% table(ca_true)
   
