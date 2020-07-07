@@ -23,7 +23,7 @@ nCores <- min(1,round(parallel::detectCores()/2),length(unique(senators)))
 print(str_c(n," Tweets"))
 print(str_c("Using ",nCores," cores."))
 
-x <- stldac_vb(users=senators,dw=dw_mat,nT = 10,nC = 4,tol = .01,seed = 1,maxiter = 2,n.cores=nCores)
+x <- stldac_vb(users=senators,dw=dw_mat,nT = 10,nC = 4,tol = .01,seed = 1,maxiter = 200,n.cores=nCores)
 
 
-saveRDS(x,file = "senatorTweet_data/vb_4C_30T_test.rds")
+saveRDS(x,file = "senatorTweet_data/vb_4C_30T_200Max_1Core.rds")
