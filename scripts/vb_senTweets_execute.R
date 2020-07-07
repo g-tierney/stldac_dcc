@@ -18,7 +18,7 @@ rm(senTweets116_2020.dfm_trimmed)
 n <-   nrow(dw_mat) # 3000
 dw_mat <- dw_mat[1:n,]
 senators <- senators[1:n]
-nCores <- min(1,round(parallel::detectCores()/2),length(unique(senators)))
+nCores <- min(Inf,round(parallel::detectCores()/2),length(unique(senators)))
 
 print(str_c(n," Tweets"))
 print(str_c("Using ",nCores," cores."))
@@ -26,4 +26,4 @@ print(str_c("Using ",nCores," cores."))
 x <- stldac_vb(users=senators,dw=dw_mat,nT = 10,nC = 4,tol = .01,seed = 1,maxiter = 300,n.cores=nCores)
 
 
-saveRDS(x,file = "senatorTweet_data/vb_4C_30T_200Max_1Core.rds")
+saveRDS(x,file = "senatorTweet_data/vb_4C_30T_200Max_MaxCore.rds")
