@@ -9,7 +9,7 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
   #drop columns without words
   #dw <- dw[,colSums(dw)>0]
 
-  preschedule <- T #parallel option
+  preschedule <- F #parallel option
   
   #extract dimensions
   nU <- users %>% unique %>% length
