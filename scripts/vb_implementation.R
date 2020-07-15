@@ -126,7 +126,7 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
   return(list("lambda_mat"=lambda_mat,"phi_mat"=phi_mat,"gamma_mat"=gamma_mat,
               "alpha_mat"=alpha_mat,"beta_mat"=beta_mat,"xi"=xi,
               log_likelihood = loglike_new,lr_delta = exp(loglike_new-loglike_old),
-              "seed" = seed,niter_complete = i-1,cores = n.cores))
+              "seed" = seed,niter_complete = i-1,cores = n.cores,time = end-start))
 }
 
 #rm(alpha_mat,alpha_mat_old,beta_mat,gamma_mat,lambda_mat,phi_mat,userUpdates)
