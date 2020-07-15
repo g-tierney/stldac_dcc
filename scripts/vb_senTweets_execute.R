@@ -18,7 +18,7 @@ rm(senTweets116_2020.dfm_trimmed)
 n <-   nrow(dw_mat) # 3000
 dw_mat <- dw_mat[1:n,]
 senators <- senators[1:n]
-nCores <- min(Inf,round(parallel::detectCores()/2),length(unique(senators)))
+nCores <- min(1,round(parallel::detectCores()/2),length(unique(senators)))
 
 print(str_c(n," Tweets"))
 print(str_c("Using ",nCores," cores."))
