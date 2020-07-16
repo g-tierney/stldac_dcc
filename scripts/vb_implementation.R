@@ -57,15 +57,15 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
         
         #phi_mat[(1:nD)[users==u],] 
         phiU_new <- sapply((1:nD)[users==u],function(d){
-            update_phiUD(dw[d,],gamma = gamma_mat[u,],beta = beta_mat)
+            update_phiUD(dw[d,],gamma = gammaU_old,beta = beta_mat)
           }) %>% t
         
         #gamma_mat[u,] <- 
-        gammaU_new <- update_gammaU(lambdaU = lambda_mat[u,],phiU = phi_mat[users == u,],alpha = alpha_mat)
+        gammaU_new <- update_gammaU(lambdaU = lambdaU_old,phiU = phiU_new,alpha = alpha_mat)
         #lambda_mat[u,] <- 
-        lambdaU_new <- update_labmdaU(xi,gamma_mat[u,],alpha = alpha_mat)
+        lambdaU_new <- update_labmdaU(xi,gammaU_new,alpha = alpha_mat)
         
-        if(max(abs(phiU_old-phiU_new))<tol & max(abs(gammaU_old-gammaU_new))<tol & max(abs(lambdaU_old-lambdaU_new)) < tol){
+        if(max(abs(phiU_old-phiU_new)) < tol & max(abs(gammaU_old-gammaU_new)) < tol & max(abs(lambdaU_old-lambdaU_new)) < tol){
           convergedU <- TRUE
         } else{
           phiU_old <- phiU_new
@@ -74,9 +74,7 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
         }
         j <- j+1
       }
-      #print(lambdaU_new)
-      #print(u)
-     return(list(phiU_new,gammaU_new,lambdaU_new))
+    return(list(phiU_new,gammaU_new,lambdaU_new))
     })
 
     phi_mat <- lapply(1:nU,function(u) userUpdates[[c(u,1)]]) %>% do.call(what="rbind")
