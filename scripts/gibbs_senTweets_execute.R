@@ -27,7 +27,6 @@ senators <- senators[n]
 nCores <- min(Inf,round(parallel::detectCores()/1),length(unique(senators)))
 
 print(str_c(length(n)," Tweets"))
-print(str_c("Using ",nCores," cores."))
 
 rm(senTweets116_2020.dfm_trimmed,small_n)
 

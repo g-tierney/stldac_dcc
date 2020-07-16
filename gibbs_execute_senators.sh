@@ -6,4 +6,4 @@
 #SBATCH --mem=10G
 
 module load R
-Rscript scripts/vb_senTweets_execute.R
+Rscript scripts/gibbs_senTweets_execute.R
