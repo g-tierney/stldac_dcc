@@ -173,11 +173,23 @@ numerator_product_vec <- function(count_vec,posterior_vec){
 #resample cluster assignments
 
 sample_ca <- function(nU,ut,nC,alphag,phi,cluster_presets){
-  if(all(!is.na(cluster_presets))){
-    return(cluster_presets)
-  } else{
+  if(is.null(cluster_presets)){ #no presets
     ca_new <- sapply(1:nU, function(u){
-      if(!is.na(clustter_presets[u])){
+      z <- ut[u,]
+      
+      lprobs <- sapply(1:nC,function(c) lddirmult(z,alphag[c,]) + log(phi[c]))
+      probs <- lprobs %>% {. - max(.)} %>% exp %>% normalize()
+      
+      c_new <- sample(1:nC,size = 1,prob = probs)
+      return(c_new)
+      
+    })
+    return(ca_new)
+  } else if(all(!is.na(cluster_presets))){ #all clusters preset
+    return(cluster_presets)
+  } else{ #some clusters preset
+    ca_new <- sapply(1:nU, function(u){
+      if(!is.null(cluster_presets) & !is.na(cluster_presets[u])){
         return(cluster_presets[u])
       } else{
         z <- ut[u,]
