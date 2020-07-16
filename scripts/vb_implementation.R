@@ -58,7 +58,7 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
         #phi_mat[(1:nD)[users==u],] 
         phiU_new <- sapply((1:nD)[users==u],function(d){
             update_phiUD(dw[d,],gamma = gamma_mat[u,],beta = beta_mat)
-          })
+          }) %>% t
         
         #gamma_mat[u,] <- 
         gammaU_new <- update_gammaU(lambdaU = lambda_mat[u,],phiU = phi_mat[users == u,],alpha = alpha_mat)
@@ -79,7 +79,7 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
      return(list(phiU_new,gammaU_new,lambdaU_new))
     })
 
-    phi_mat <- lapply(1:nU,function(u) t(userUpdates[[c(u,1)]])) %>% do.call(what="rbind")
+    phi_mat <- lapply(1:nU,function(u) userUpdates[[c(u,1)]]) %>% do.call(what="rbind")
     gamma_mat <- sapply(1:nU,function(u) userUpdates[[c(u,2)]]) %>% t
     lambda_mat <- sapply(1:nU,function(u) userUpdates[[c(u,3)]]) %>% t
     if(nC==1) lambda_mat <- matrix(1,nrow=nU,ncol=1)
