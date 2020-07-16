@@ -135,7 +135,7 @@ elbo <- function(alpha_mat,beta_mat,xi,lambda_mat,phi_mat,gamma_mat,W_mat,users_
   log_beta_mat_t <- t(log(beta_mat))
   
   #mapping from overleaf terms indicated in comments
-  sum(t(lambda_mat[1:3,]) * log(xi)) + #1
+  sum(t(lambda_mat) * log(xi)) + #1
     sum((lgamma(rowSums(alpha_mat))-rowSums(lgamma(alpha_mat)))*colSums(lambda_mat)) + #2 partially
     sum(unlist(parallel::mclapply(1:nU,mc.cores=n.cores,function(u){
       sum(unlist(lapply(1:nC,function(c){

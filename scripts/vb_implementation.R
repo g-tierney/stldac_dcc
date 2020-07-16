@@ -48,11 +48,12 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
     #for(u in 1:nU){
       convergedU <- F 
       j <- 1
+      #save old values to check convergence
+      phiU_old <- phi_mat[(1:nD)[users==u],]
+      gammaU_old <- gamma_mat[u,]
+      lambdaU_old <- lambda_mat[u,]
+      
       while(!convergedU & j<20){ 
-        #save old values to check convergence
-        phiU_old <- phi_mat[(1:nD)[users==u],]
-        gammaU_old <- gamma_mat[u,]
-        lambdaU_old <- lambda_mat[u,]
         
         #phi_mat[(1:nD)[users==u],] 
         phiU_new <- sapply((1:nD)[users==u],function(d){
@@ -64,9 +65,13 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
         #lambda_mat[u,] <- 
         lambdaU_new <- update_labmdaU(xi,gamma_mat[u,],alpha = alpha_mat)
         
-        if(max(abs(phiU_old-phi_mat[(1:nD)[users==u],]))<.001 & 
-           max(abs(gammaU_old-gamma_mat[u,]))<.001 & 
-           max(abs(lambdaU_old-lambda_mat[u,]))<.001) convergedU <- TRUE
+        if(max(abs(phiU_old-phiU_new))<tol & max(abs(gammaU_old-gammaU_new))<tol & max(abs(lambdaU_old-lambdaU_new)) < tol){
+          convergedU <- TRUE
+        } else{
+          phiU_old <- phiU_new
+          gammaU_old <- gammaU_new
+          lambdaU_old <- lambdaU_new
+        }
         j <- j+1
       }
       #print(lambdaU_new)
@@ -95,7 +100,7 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
       #print(alpha_mat[,1])
       
       #check convergence
-      if(max(abs(alpha_mat_old-alpha_mat))<.001) converged_alpha <- TRUE
+      if(max(abs(alpha_mat_old-alpha_mat))<tol) converged_alpha <- TRUE
       q <- q+1
     }
     
