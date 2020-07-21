@@ -14,6 +14,14 @@ source("scripts/gibbs_functions.R")
 load('senatorTweet_data/rinputs.Rdata')
 dw_mat <- convert(senTweets116_2020.dfm_trimmed,to="matrix")
 
+if(!dir.exists("output")){
+  dir.create("output")
+}
+
+if(!dir.exists("temp")){
+  dir.create("temp")
+}
+
 
 set.seed(196)
 small_n <- senTweets116_2020.dfm_trimmed@docvars %>% 
@@ -21,10 +29,9 @@ small_n <- senTweets116_2020.dfm_trimmed@docvars %>%
   sample_n(4) %>% 
   select(docname_)
 
-n <-   1:nrow(dw_mat) # which(senTweets116_2020.dfm_trimmed@docvars$docname_ %in% small_n$docname_) #
+n <- which(senTweets116_2020.dfm_trimmed@docvars$docname_ %in% small_n$docname_) # 1:nrow(dw_mat) #
 dw_mat <- dw_mat[n,]
 senators <- senators[n]
-nCores <- min(Inf,round(parallel::detectCores()/1),length(unique(senators)))
 
 print(str_c(length(n)," Tweets"))
 
@@ -34,12 +41,13 @@ rm(senTweets116_2020.dfm_trimmed,small_n)
 x <- collapsed_gibbs_1topic_clusters(alpha = 1,eta = .1,nu = 1,
                                       users = senators,dw = dw_mat,
                                       nT = 10,nC = 4,
-                                      niter = 2,
+                                      niter = 110,
                                       seed = 196,mcmc_update = T,
                                       nalphag_steps = 10,
                                       mu_scale = 0,sigma_scale = 100,
                                       prop_scale_center = 100,alphag_sample_method = "componentwise",
-                                      print_clusters = T)
+                                      print_clusters = T,
+                                      partial_output = T)
 
-
-
+saveRDS(x,"output/gibbs_4C_10T_mu0_sigma100_componentwise.rds")
+gc()

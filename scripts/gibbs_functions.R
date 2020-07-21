@@ -144,7 +144,8 @@ collapsed_gibbs_1topic_clusters <- function(alpha=1,eta=1,nu=1,
                                             alphag_sample_method = c("map_guess","current_center","componentwise")[3],
                                             print_clusters = F,
                                             topic_presets = NULL,cluster_presets = NULL,
-                                            ta_true=NULL){
+                                            ta_true=NULL,
+                                            partial_output=FALSE){
   
   
   set.seed(seed)
@@ -344,6 +345,17 @@ collapsed_gibbs_1topic_clusters <- function(alpha=1,eta=1,nu=1,
           print(str_c("topic purity:" ,round(sum(purity)/nD,2)))
         }
       }
+    }
+    #save output every 100 steps
+    if(iter %% 100 == 0 & partial_output){
+      save(list(ut=results_ut,
+                tw=results_tw,
+                ta=results_ta,
+                ca=results_ca,
+                alphag=results_alphag,
+                phi=results_phi,
+                words=colnames(dw)),
+           file = "temp/gibbs_partial_output.RData")
     }
   }
   
