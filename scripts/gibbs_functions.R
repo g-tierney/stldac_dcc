@@ -156,6 +156,7 @@ collapsed_gibbs_1topic_clusters <- function(alpha=1,eta=1,nu=1,
   nU <- users %>% unique %>% length
   nD <- nrow(dw)
   nW <- dim(dw)[2]
+  words <- colnames(dw)
   
   #turn users into integers and store list of doc ids
   users <- users %>% match(unique(users))
@@ -348,7 +349,7 @@ collapsed_gibbs_1topic_clusters <- function(alpha=1,eta=1,nu=1,
     }
     #save output every 100 steps
     if(iter %% 100 == 0 & partial_output){
-      save(results_ut,results_tw,results_ta,results_ca,results_alphag,results_phi,colnames(dw),
+      save(results_ut,results_tw,results_ta,results_ca,results_alphag,results_phi,words,
            file = "temp/gibbs_partial_output.RData")
     }
   }
