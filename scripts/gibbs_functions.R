@@ -348,13 +348,7 @@ collapsed_gibbs_1topic_clusters <- function(alpha=1,eta=1,nu=1,
     }
     #save output every 100 steps
     if(iter %% 100 == 0 & partial_output){
-      save(list(ut=results_ut,
-                tw=results_tw,
-                ta=results_ta,
-                ca=results_ca,
-                alphag=results_alphag,
-                phi=results_phi,
-                words=colnames(dw)),
+      save(results_ut,results_tw,results_ta,results_ca,results_alphag,results_phi,colnames(dw),
            file = "temp/gibbs_partial_output.RData")
     }
   }
