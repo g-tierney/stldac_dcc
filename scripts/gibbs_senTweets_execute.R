@@ -29,7 +29,7 @@ small_n <- senTweets116_2020.dfm_trimmed@docvars %>%
   sample_n(4) %>% 
   select(docname_)
 
-n <- which(senTweets116_2020.dfm_trimmed@docvars$docname_ %in% small_n$docname_) # 1:nrow(dw_mat) #
+n <- 1:nrow(dw_mat) #which(senTweets116_2020.dfm_trimmed@docvars$docname_ %in% small_n$docname_) # 
 dw_mat <- dw_mat[n,]
 senators <- senators[n]
 
@@ -41,7 +41,7 @@ rm(senTweets116_2020.dfm_trimmed,small_n)
 x <- collapsed_gibbs_1topic_clusters(alpha = 1,eta = .1,nu = 1,
                                       users = senators,dw = dw_mat,
                                       nT = 10,nC = 4,
-                                      niter = 110,
+                                      niter = 1000,
                                       seed = 196,mcmc_update = T,
                                       nalphag_steps = 10,
                                       mu_scale = 0,sigma_scale = 100,
