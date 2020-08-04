@@ -38,9 +38,11 @@ print(str_c(length(n)," Tweets"))
 rm(senTweets116_2020.dfm_trimmed,small_n)
 
 
+#set parameters
+
 x <- collapsed_gibbs_1topic_clusters(alpha = 1,eta = .1,nu = 1,
                                       users = senators,dw = dw_mat,
-                                      nT = 10,nC = 4,
+                                      nT = 20,nC = 6,
                                       niter = 1000,
                                       seed = 196,mcmc_update = T,
                                       nalphag_steps = 10,
@@ -49,5 +51,5 @@ x <- collapsed_gibbs_1topic_clusters(alpha = 1,eta = .1,nu = 1,
                                       print_clusters = T,
                                       partial_output = T)
 
-saveRDS(x,"output/gibbs_4C_10T_mu0_sigma100_componentwise.rds")
+saveRDS(x,"output/gibbs_6C_20T_mu0_sigma100_componentwise.rds")
 gc()
