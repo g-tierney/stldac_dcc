@@ -15,7 +15,7 @@ load('senatorTweet_data/rinputs.Rdata')
 dw_mat <- convert(senTweets116_2020.dfm_trimmed,to="matrix")
 
 
-set.seed(196)
+set.seed(515)
 small_n <- senTweets116_2020.dfm_trimmed@docvars %>% 
   group_by(screen_name) %>% 
   sample_n(4) %>% 
@@ -34,4 +34,4 @@ rm(senTweets116_2020.dfm_trimmed,small_n)
 x <- stldac_vb(users=senators,dw=dw_mat,nT = 10,nC = 4,tol = .01,seed = 1,maxiter = 1000,n.cores=nCores)
 gc()
 
-saveRDS(x,file = "senatorTweet_data/vb_4C_30T_200Max_MaxCore.rds")
+saveRDS(x,file = "output/vb_4C_30T_1000Max_1Core_seed515.rds")
