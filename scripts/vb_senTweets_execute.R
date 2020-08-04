@@ -34,4 +34,4 @@ rm(senTweets116_2020.dfm_trimmed,small_n)
 x <- stldac_vb(users=senators,dw=dw_mat,nT = 10,nC = 4,tol = .01,seed = 1,maxiter = 1000,n.cores=nCores)
 gc()
 
-#saveRDS(x,file = "senatorTweet_data/vb_4C_30T_200Max_MaxCore.rds")
+saveRDS(x,file = "senatorTweet_data/vb_4C_30T_200Max_MaxCore.rds")
