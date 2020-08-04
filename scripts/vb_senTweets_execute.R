@@ -14,13 +14,14 @@ source("scripts/vb_implementation.R")
 load('senatorTweet_data/rinputs.Rdata')
 dw_mat <- convert(senTweets116_2020.dfm_trimmed,to="matrix")
 
-
-set.seed(515)
+#seed set for creating a small dataset for testing
+set.seed(196)
 small_n <- senTweets116_2020.dfm_trimmed@docvars %>% 
   group_by(screen_name) %>% 
   sample_n(4) %>% 
   select(docname_)
 
+#switch n values to choose sample or full data
 n <-   1:nrow(dw_mat) # which(senTweets116_2020.dfm_trimmed@docvars$docname_ %in% small_n$docname_) #
 dw_mat <- dw_mat[n,]
 senators <- senators[n]
@@ -31,7 +32,10 @@ print(str_c("Using ",nCores," cores."))
 
 rm(senTweets116_2020.dfm_trimmed,small_n)
 
-x <- stldac_vb(users=senators,dw=dw_mat,nT = 10,nC = 4,tol = .01,seed = 1,maxiter = 1000,n.cores=nCores)
+#set parameters
+maxiter <- 1000; nC <- 6; nT <- 20; seed <- 196
+
+x <- stldac_vb(users=senators,dw=dw_mat,nT = nT,nC = nC,tol = .01,seed = seed,maxiter = 1000,n.cores=nCores)
 gc()
 
-saveRDS(x,file = "output/vb_4C_30T_1000Max_1Core_seed515.rds")
+saveRDS(x,file = str_c("output/vb_",nC,"C_",nT,"T_",maxiter,"Max_",nCores,"Core_",seed,"seed.rds"))
