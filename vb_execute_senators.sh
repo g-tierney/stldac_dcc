@@ -3,7 +3,7 @@
 #SBATCH -p volfovskylab,statdept-low,herringlab-low,common
 #SBATCH -N1
 #SBATCH -c1
-#SBATCH --mem=25G
+#SBATCH --mem=50G
 #SBATCH -o vb_JanMay_log.txt
 
 module load R

@@ -28,7 +28,7 @@ small_n <- senTweets_trimmed.dfm@docvars %>%
 n <-   1:nrow(dw_mat) # which(senTweets_trimmed.dfm@docvars$docname_ %in% small_n$docname_) #
 dw_mat <- dw_mat[n,]
 senators <- senators[n]
-nCores <- min(Inf,round(parallel::detectCores()/1),length(unique(senators)))
+nCores <- min(Inf,round(parallel::detectCores()/1),length(unique(senators))/4)
 
 print(str_c(length(n)," Tweets"))
 print(str_c("Using ",nCores," cores."))
