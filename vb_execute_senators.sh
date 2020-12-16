@@ -4,7 +4,7 @@
 #SBATCH -N1
 #SBATCH -c1
 #SBATCH --mem=25G
-#SBATCH -o vb_log.txt
+#SBATCH -o vb_JanMay_log.txt
 
 module load R
-Rscript scripts/vb_senTweets_execute.R
+Rscript scripts/vb_senTweets_execute_JanMay.R
