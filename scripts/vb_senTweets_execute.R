@@ -19,7 +19,7 @@ senators <- senTweets_trimmed.dfm@docvars$screen_name
 set.seed(196)
 small_n <- senTweets_trimmed.dfm@docvars %>% 
   group_by(screen_name) %>% 
-  sample_n(4) %>% 
+  sample_n(pmin(4,n())) %>% 
   select(docname_)
 
 #switch n values to choose sample or full data
