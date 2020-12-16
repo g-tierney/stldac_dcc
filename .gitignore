@@ -1,4 +1,6 @@
 senatorTweet_data/*
+output/*
 .Rproj.user
 stldac_dcc.Rproj
 .Rhistory
+*.DS_Store
