@@ -12,6 +12,8 @@ source("scripts/vb_stldac_functions.R")
 source("scripts/vb_implementation.R")
 
 load('senatorTweet_data/senatorTweet_dfms.Rdata')
+senTweets_trimmed.dfm <- senTweets_trimmed.dfm %>% 
+  dfm_subset(created_at < "2020-05-31")
 dw_mat <- convert(senTweets_trimmed.dfm,to="matrix")
 senators <- senTweets_trimmed.dfm@docvars$screen_name
 
@@ -26,7 +28,7 @@ small_n <- senTweets_trimmed.dfm@docvars %>%
 n <-   1:nrow(dw_mat) # which(senTweets_trimmed.dfm@docvars$docname_ %in% small_n$docname_) #
 dw_mat <- dw_mat[n,]
 senators <- senators[n]
-nCores <- min(1,round(parallel::detectCores()/1),length(unique(senators)))
+nCores <- min(Inf,round(parallel::detectCores()/1),length(unique(senators)))
 
 print(str_c(length(n)," Tweets"))
 print(str_c("Using ",nCores," cores."))
@@ -39,4 +41,4 @@ maxiter <- 1000; nC <- 4; nT <- 30; seed <- 196
 x <- stldac_vb(users=senators,dw=dw_mat,nT = nT,nC = nC,tol = .01,seed = seed,maxiter = 1000,n.cores=nCores)
 gc()
 
-saveRDS(x,file = str_c("output/vb_",nC,"C_",nT,"T_",maxiter,"Max_",nCores,"Core_",seed,"seed.rds"))
+saveRDS(x,file = str_c("output/vb_",nC,"C_",nT,"T_",maxiter,"Max_",nCores,"Core_",seed,"seed_JanMay.rds"))
