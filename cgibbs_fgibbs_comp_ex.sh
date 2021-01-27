@@ -4,7 +4,7 @@
 #SBATCH -N1
 #SBATCH -c1
 #SBATCH --mem=50G
-#SBATCH -o vb_JanMay_log.txt
+#SBATCH -o cgibbs_fgibbs_comp_ex_log.txt
 
 module load R
 Rscript scripts/cgibbs_fgibbs_comp.R

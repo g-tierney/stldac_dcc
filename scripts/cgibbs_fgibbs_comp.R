@@ -1,7 +1,5 @@
 
-library(tidytext)
 library(tidyverse)
-#require(quanteda)
 
 # see tutorial here: https://tutorials.quanteda.io/machine-learning/topicmodel/
 
