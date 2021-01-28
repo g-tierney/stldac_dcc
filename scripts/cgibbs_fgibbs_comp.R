@@ -36,6 +36,16 @@ cgibbs <- collapsed_gibbs_1topic_clusters(alpha = 1,eta = .1,nu = 1,
                                           prop_scale_center = 100,alphag_sample_method = "componentwise",
                                           print_clusters = T)
 
+print("full gibbs topic recovery")
+fgibbs$ta %>% results_freq_table() %>% table(dat$ta_true)
+fgibbs$ta %>% results_freq_table() %>% table(dat$ta_true) %>% nmi
+
+print("collapsed gibbs topic recovery")
+cgibbs$ta %>% results_freq_table() %>% table(dat$ta_true)
+cgibbs$ta %>% results_freq_table() %>% table(dat$ta_true) %>% nmi
+
+
+
 if(!dir.exists("output/cgibbs_fgibbs_comparison")) dir.create("output/cgibbs_fgibbs_comparison")
 
 saveRDS(list(fgibbs = fgibbs,cgibbs = cgibbs),file = "output/cgibbs_fgibbs_comparison/gibbs_results.rds")

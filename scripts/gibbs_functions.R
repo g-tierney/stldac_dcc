@@ -397,8 +397,8 @@ full_gibbs_1topic <- function(alpha=1,eta=1,nu=1,
   #turn users into integers
   users <- users %>% match(unique(users))
   
-  #initialize topic assignments
-  ta <- sample(1:nT,replace = T,size = nD)
+  #initialize topic assignments (start at truth)
+  ta <- dat$ta_true #sample(1:nT,replace = T,size = nD)
   
   #initialize cluster assignment
   ca <- sample(1:nC,size = nU,replace = T)
