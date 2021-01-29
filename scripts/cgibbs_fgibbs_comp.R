@@ -22,14 +22,14 @@ dat <- make_data(nW = 4000,nT = 10,topic_low = 1,topic_high = 10,nC = 3,alpha_tr
 fgibbs <- full_gibbs_1topic(alpha = 1,eta = .1,nu = 1,
                             users = dat$users,dw = dat$dw,
                             nT = dat$nT,nC = dat$nC,
-                            niter = 200,nClusterIter = 50,
+                            niter = 2000,nClusterIter = 50,
                             seed = seed.sim,
                             mu_scale = 0,sigma_scale = 100)
 #run collapsed gibbs
 cgibbs <- collapsed_gibbs_1topic_clusters(alpha = 1,eta = .1,nu = 1,
                                           users = dat$users,dw = dat$dw,
                                           nT = dat$nT,nC = dat$nC,
-                                          niter = 50,
+                                          niter = 500,
                                           seed = seed.sim,mcmc_update = T,
                                           nClusterIter = 50,
                                           mu_scale = 0,sigma_scale = 100,
