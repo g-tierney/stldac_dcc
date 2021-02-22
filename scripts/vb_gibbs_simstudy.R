@@ -36,7 +36,7 @@ sim_vb_gibs_comp <- function(nUC.sim,nDperU.sim,seed.sim = 1){
   
   #run VB and get output
   vb_output.list <- lapply(1:5,function(s) stldac_vb(alpha_start = 00,users = dat$users,dw = dat$dw,nT = dat$nT,nC = dat$nC,maxiter = 300,seed = s))
-  vb_output1 <- lapply(vb_output.list,function(l) l$log_like) %>% which.max %>% vb_output.list[[.]]
+  vb_output1 <- parallel::mclapply(vb_output.list,function(l) l$log_like) %>% which.max %>% vb_output.list[[.]]
   
   #run collapsed gibbs
   groundtruth_estimate <- collapsed_gibbs_1topic_clusters(alpha = 1,eta = .1,nu = 1,
@@ -81,7 +81,7 @@ sim_vb_gibs_comp <- function(nUC.sim,nDperU.sim,seed.sim = 1){
 #sim_vb_gibs_comp(nUC.sim = 2,nDperU.sim = 5)
 
 nUC.values <- c(5,10,20,50)
-nDperU.values <- c(50,100,200,500)
+nDperU.values <- c(50,100,200,500)/10
 seeds <- 196:200
 
 params <- expand.grid(nUC.values=nUC.values[1:2],
@@ -94,7 +94,10 @@ params <- expand.grid(nUC.values=nUC.values[1:2],
 # array verrsion
 start <- Sys.time()
 
-slurm_id <- as.integer(Sys.getenv('SLURM_ARRAY_TASK_ID'))
+exists('SLURM_ARRAY_TASK_ID')
+if(Sys.getenv('SLURM_ARRAY_TASK_ID') != ""){
+  slurm_id <- as.integer(Sys.getenv('SLURM_ARRAY_TASK_ID'))
+} else slurm_id <- 1
 
 seed <- params$seeds[slurm_id]
 nUC <- params$nUC.values[slurm_id]
