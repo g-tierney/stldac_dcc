@@ -82,12 +82,12 @@ sim_vb_gibs_comp <- function(nUC.sim,nDperU.sim,seed.sim = 1){
 #sim_vb_gibs_comp(nUC.sim = 2,nDperU.sim = 5)
 
 nUC.values <- c(5,10,20,50)
-nDperU.values <- c(50,100,200,500)/10
+nDperU.values <- c(50,100,200,500)
 seeds <- 196:200
 
-params <- expand.grid(nUC.values=nUC.values[1:2],
-                      nDperU.values=nDperU.values[1],
-                      seeds=seeds[1]) %>% as_tibble %>% 
+params <- expand.grid(nUC.values=nUC.values,
+                      nDperU.values=nDperU.values,
+                      seeds=seeds) %>% as_tibble %>% 
   arrange(-nUC.values*nDperU.values) %>% 
   #filter(row_number()>=5) %>% 
   identity() 

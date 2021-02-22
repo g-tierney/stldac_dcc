@@ -5,7 +5,7 @@
 #SBATCH -c1
 #SBATCH --mem=50G
 #SBATCH -o logs/log_simstudy_ex.txt
-#SBATCH --array=1-2
+#SBATCH --array=1-80
 #SBATCH --mail-user=gt83@duke.edu
 #SBATCH --mail-type=END,FAIL
 
