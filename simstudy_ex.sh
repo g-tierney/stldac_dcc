@@ -9,6 +9,6 @@
 #SBATCH --mail-user=gt83@duke.edu
 #SBATCH --mail-type=END,FAIL
 
-module load R
+module load R/4.0.0
 R CMD BATCH --no-restore --no-save scripts/vb_gibbs_simstudy.R logs/rlog_simstudy$SLURM_ARRAY_TASK_ID.Rout
 
