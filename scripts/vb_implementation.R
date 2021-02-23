@@ -7,9 +7,7 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
                       n.cores = parallel::detectCores()){
   
   #drop columns without words
-  #dw <- dw[,colSums(dw)>0]
-
-  preschedule <- F #parallel option
+  dw <- dw[,colSums(dw)>0]
   
   #extract dimensions
   nU <- users %>% unique %>% length
@@ -44,40 +42,36 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
     loglike_old <- loglike_new
     
     #update user paramters with parallel option
-    userUpdates <- parallel::mclapply(1:nU,mc.cores = n.cores,mc.preschedule=preschedule,function(u){
+    userUpdates <- parallel::mclapply(1:nU,mc.cores = n.cores,function(u){
     #for(u in 1:nU){
       convergedU <- F 
       j <- 1
-      #save old values to check convergence
-      phiU_old <- phi_mat[(1:nD)[users==u],]
-      gammaU_old <- gamma_mat[u,]
-      lambdaU_old <- lambda_mat[u,]
-      
       while(!convergedU & j<20){ 
+        #save old values to check convergence
+        phiU_old <- phi_mat[(1:nD)[users==u],]
+        gammaU_old <- gamma_mat[u,]
+        lambdaU_old <- lambda_mat[u,]
         
         #phi_mat[(1:nD)[users==u],] 
         phiU_new <- sapply((1:nD)[users==u],function(d){
-            update_phiUD(dw[d,],gamma = gammaU_old,beta = beta_mat)
-          }) %>% t
+            update_phiUD(dw[d,],gamma = gamma_mat[u,],beta = beta_mat)
+          })
         
         #gamma_mat[u,] <- 
-        gammaU_new <- update_gammaU(lambdaU = lambdaU_old,phiU = phiU_new,alpha = alpha_mat)
+        gammaU_new <- update_gammaU(lambdaU = lambda_mat[u,],phiU = phi_mat[users == u,],alpha = alpha_mat)
         #lambda_mat[u,] <- 
-        lambdaU_new <- update_labmdaU(xi,gammaU_new,alpha = alpha_mat)
+        lambdaU_new <- update_labmdaU(xi,gamma_mat[u,],alpha = alpha_mat)
         
-        if(max(abs(phiU_old-phiU_new)) < tol & max(abs(gammaU_old-gammaU_new)) < tol & max(abs(lambdaU_old-lambdaU_new)) < tol){
-          convergedU <- TRUE
-        } else{
-          phiU_old <- phiU_new
-          gammaU_old <- gammaU_new
-          lambdaU_old <- lambdaU_new
-        }
+        if(max(abs(phiU_old-phi_mat[(1:nD)[users==u],]))<.001 & 
+           max(abs(gammaU_old-gamma_mat[u,]))<.001 & 
+           max(abs(lambdaU_old-lambda_mat[u,]))<.001) convergedU <- TRUE
         j <- j+1
       }
-    return(list(phiU_new,gammaU_new,lambdaU_new))
+      #print(lambdaU_new)
+      return(list(phiU_new,gammaU_new,lambdaU_new))
     })
-
-    phi_mat <- lapply(1:nU,function(u) userUpdates[[c(u,1)]]) %>% do.call(what="rbind")
+    
+    phi_mat <- lapply(1:nU,function(u) t(userUpdates[[c(u,1)]])) %>% do.call(what="rbind")
     gamma_mat <- sapply(1:nU,function(u) userUpdates[[c(u,2)]]) %>% t
     lambda_mat <- sapply(1:nU,function(u) userUpdates[[c(u,3)]]) %>% t
     if(nC==1) lambda_mat <- matrix(1,nrow=nU,ncol=1)
@@ -98,7 +92,7 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
       #print(alpha_mat[,1])
       
       #check convergence
-      if(max(abs(alpha_mat_old-alpha_mat))<tol) converged_alpha <- TRUE
+      if(max(abs(alpha_mat_old-alpha_mat))<.001) converged_alpha <- TRUE
       q <- q+1
     }
     
@@ -108,29 +102,25 @@ stldac_vb <- function(alpha_start=1,#beta_start=.1,xi_start = 1,
     
     
     
-    if(i %% 4 == 0 | i<=maxiter){ #update likelihood every 5 itterattions and on the final itteration
-      #NEW: do every round
+    if(i %% 5 == 0 | i<=maxiter){ #update likelihood every itterations
       loglike_new <- elbo(alpha_mat = alpha_mat,beta_mat = beta_mat,xi = xi,
                           lambda_mat = lambda_mat,phi_mat = phi_mat,gamma_mat = gamma_mat,
-                          W_mat = dw,users_list = users,n.cores = n.cores)
-      print(str_c("ll: ",loglike_new,", delta: ",exp(loglike_new-loglike_old)))
+                          W_mat = dw,users_list = users)
       if(i>5&(exp(loglike_new-loglike_old)<1+tol)) converged <- TRUE
     }
     
     i <- i+1
-    if(i %% 5==0) print(i)
+    if(i %% 5==0 | converged |  i == maxiter) print(str_c(i,", ll: ",loglike_new,", delta: ",exp(loglike_new-loglike_old)))
     end <- Sys.time()
   }
   (end-start)/(i-1)
-  print(str_c(capture.output(round(end-start,2)),", iterations completed: ",i-1))
+  print(str_c("Time elapsed: ",round(end-start,2),", iterations completed: ",i-1))
   #phi_mat %>% apply(1,which.max) %>% table(ta_true)
   #lambda_mat %>% apply(1,which.max) %>% table(ca_true)
   
   return(list("lambda_mat"=lambda_mat,"phi_mat"=phi_mat,"gamma_mat"=gamma_mat,
               "alpha_mat"=alpha_mat,"beta_mat"=beta_mat,"xi"=xi,
-              log_likelihood = loglike_new,lr_delta = exp(loglike_new-loglike_old),
-              "seed" = seed,niter_complete = i-1,cores = n.cores,time = end-start))
+              log_likelihood = loglike_new,lr_delta = exp(loglike_new-loglike_old),niter=i-1))
 }
 
 #rm(alpha_mat,alpha_mat_old,beta_mat,gamma_mat,lambda_mat,phi_mat,userUpdates)
-

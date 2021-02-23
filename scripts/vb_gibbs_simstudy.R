@@ -35,7 +35,12 @@ sim_vb_gibs_comp <- function(nUC.sim,nDperU.sim,seed.sim = 1){
   #                            mu_scale = 0,sigma_scale = 100)
   
   #run VB and get output
-  vb_output.list <- lapply(1:5,function(s) stldac_vb(alpha_start = 00,users = dat$users,dw = dat$dw,nT = dat$nT,nC = dat$nC,maxiter = 300,seed = s))
+  if(nrow(dat$dw)<=2000){
+    vb_output.list <- parallel::mclapply(1:5,function(s) stldac_vb(alpha_start = 00,users = dat$users,dw = dat$dw,nT = dat$nT,nC = dat$nC,maxiter = 300,seed = s),
+                             mc.cores = 5)
+  }else{
+    vb_output.list <- lapply(1:5,function(s) stldac_vb(alpha_start = 00,users = dat$users,dw = dat$dw,nT = dat$nT,nC = dat$nC,maxiter = 300,seed = s))
+  }
   vb_output1 <- lapply(vb_output.list,function(l) l$log_like) %>% which.max %>% vb_output.list[[.]]
   
   #run collapsed gibbs

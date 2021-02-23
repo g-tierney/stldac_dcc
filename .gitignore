@@ -1,5 +1,6 @@
 senatorTweet_data/*
 output/*
+scripts/archive/*
 .Rproj.user
 stldac_dcc.Rproj
 .Rhistory

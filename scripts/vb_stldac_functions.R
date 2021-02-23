@@ -144,7 +144,7 @@ elbo <- function(alpha_mat,beta_mat,xi,lambda_mat,phi_mat,gamma_mat,W_mat,users_
     }))) + #rest of 2
     sum(phi_mat*expts[users_list,]) + #3
     #sum(W_mat[rep(1:nD,rep(nT,nD)),]*log_beta_mat[rep(1:nT,nD),]*phi_mat[rep(1:nD,rep(nT,nD)),]) #breaks vector memory limitt
-    sum(unlist(parallel::mclapply(1:nD,mc.cores=n.cores,mc.preschedule=T,function(d){
+    sum(unlist(parallel::mclapply(1:nD,mc.cores=n.cores,function(d){
       sum(t(W_mat[d,]*log_beta_mat_t)*phi_mat[d,])
       #sum(matrix(W_mat[d,],nrow=nT,ncol=dim(W_mat)[2],byrow=T)*log_beta_mat*matrix(phi_mat[d,],ncol = dim(W_mat)[2],nrow = nT))
     }))) + #4, norm constant is constant so ignored

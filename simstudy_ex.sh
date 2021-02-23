@@ -3,9 +3,9 @@
 #SBATCH -p volfovskylab,statdept-low,herringlab-low,common
 #SBATCH -N1
 #SBATCH -c1
-#SBATCH --mem=50G
-#SBATCH -o logs/log_simstudy_ex.txt
-#SBATCH --array=1-50
+#SBATCH --mem=100G
+#SBATCH -o logs/log_simstudy_ex_%A.txt
+#SBATCH --array=1-20
 #SBATCH --mail-user=gt83@duke.edu
 #SBATCH --mail-type=END,FAIL
 
