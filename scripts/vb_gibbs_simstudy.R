@@ -35,8 +35,7 @@ sim_vb_gibs_comp <- function(nUC.sim,nDperU.sim,seed.sim = 1){
   #                            mu_scale = 0,sigma_scale = 100)
   
   #run VB and get output
-  vb_output.list <- parallel::mclapply(1:5,function(s) stldac_vb(alpha_start = 00,users = dat$users,dw = dat$dw,nT = dat$nT,nC = dat$nC,maxiter = 300,seed = s),
-                                       mc.cores = 5)
+  vb_output.list <- lapply(1:5,function(s) stldac_vb(alpha_start = 00,users = dat$users,dw = dat$dw,nT = dat$nT,nC = dat$nC,maxiter = 300,seed = s))
   vb_output1 <- lapply(vb_output.list,function(l) l$log_like) %>% which.max %>% vb_output.list[[.]]
   
   #run collapsed gibbs
@@ -88,8 +87,8 @@ seeds <- 196:200
 params <- expand.grid(nUC.values=nUC.values,
                       nDperU.values=nDperU.values,
                       seeds=seeds) %>% as_tibble %>% 
-  arrange(-nUC.values*nDperU.values) %>% 
-  #filter(row_number()>=5) %>% 
+  arrange(-nUC.values*nDperU.values,nUC.values) %>% 
+  #filter() %>% 
   identity() 
 
 # array verrsion
@@ -105,6 +104,7 @@ nUC <- params$nUC.values[slurm_id]
 nD <- params$nDperU.values[slurm_id]
 
 set.seed(slurm_id)
+print(str_c("nUC: ",nUC,", nD: ",nD,", seed: ",seed))
 sim_results <- sim_vb_gibs_comp(nUC.sim = nUC,nDperU.sim = nD,seed.sim = seed)
 saveRDS(sim_results,str_c("output/vb-gibbs-comp-sims/nUC",nUC,"_nDU",nD,"_seed",seed,".rds"))
 
