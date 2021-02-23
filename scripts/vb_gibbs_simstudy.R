@@ -94,7 +94,6 @@ params <- expand.grid(nUC.values=nUC.values,
 # array verrsion
 start <- Sys.time()
 
-exists('SLURM_ARRAY_TASK_ID')
 if(Sys.getenv('SLURM_ARRAY_TASK_ID') != ""){
   slurm_id <- as.integer(Sys.getenv('SLURM_ARRAY_TASK_ID'))
 } else slurm_id <- 1
