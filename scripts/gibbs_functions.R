@@ -1,6 +1,6 @@
 
 
-
+ 
 #' Function to run the collapsed Gibbs sampler on twitter data
 #' 
 #' @param alpha the prior for the user-topic probability vector theta (default set to 1)
