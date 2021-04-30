@@ -24,4 +24,4 @@ nCores <- min(1,round(parallel::detectCores()/1),length(unique(senators)))
 x <- stldac_vb(users=senators[train],dw=dw_mat[train,],nT = nT,nC = nC,tol = .01,seed = seed,maxiter = 2,n.cores=nCores)
 gc()
 
-saveRDS(x,file = str_c("output/vb_",nC,"C_",nT,"T_",maxiter,"Max_",nCores,"Core_",seed,"seed_full.rds"))
+saveRDS(x,file = str_c("output/vb_",nC,"C_",nT,"T_",maxiter,"Max_",nCores,"Core_",seed,"seed_train.rds"))
