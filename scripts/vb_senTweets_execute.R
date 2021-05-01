@@ -19,7 +19,8 @@ if(Sys.getenv('SLURM_ARRAY_TASK_ID') != ""){
 
 #set parameters
 maxiter <- 1000; nC <- 2*slurm_id; nT <- 30; seed <- 196
-nCores <- min(Inf,round(parallel::detectCores()/1),length(unique(senators)))
+nCores <- min(Inf,round(parallel::detectCores()/1),round(length(unique(senators))/2))
+print(nCores)
 
 x <- stldac_vb(users=senators,dw=dw_mat,nT = nT,nC = nC,tol = .01,seed = seed,maxiter = maxiter,n.cores=nCores)
 gc()
