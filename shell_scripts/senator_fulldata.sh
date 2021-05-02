@@ -3,7 +3,7 @@
 #SBATCH -p volfovskylab,statdept-low,herringlab-low,common
 #SBATCH -N1
 #SBATCH -c1
-#SBATCH --mem=100G
+#SBATCH --mem=120G
 #SBATCH -o logs/log_full_senators_%A.txt
 #SBATCH --array=1-5
 #SBATCH --mail-user=gt83@duke.edu
