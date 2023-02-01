@@ -23,7 +23,7 @@ small_n <- senTweets116_2020.dfm_trimmed@docvars %>%
   select(docname_)
 
 #switch n values to choose sample or full data
-n <-   1:nrow(dw_mat) # which(senTweets116_2020.dfm_trimmed@docvars$docname_ %in% small_n$docname_) #
+n <-   which(senTweets116_2020.dfm_trimmed@docvars$docname_ %in% small_n$docname_) #1:nrow(dw_mat) # 
 dw_mat <- dw_mat[n,]
 senators <- senators[n]
 nCores <- min(round(parallel::detectCores()/1),length(unique(senators))/4)
