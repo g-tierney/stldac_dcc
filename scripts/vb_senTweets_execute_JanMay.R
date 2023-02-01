@@ -28,7 +28,7 @@ small_n <- senTweets_trimmed.dfm@docvars %>%
 n <-   1:nrow(dw_mat) # which(senTweets_trimmed.dfm@docvars$docname_ %in% small_n$docname_) #
 dw_mat <- dw_mat[n,]
 senators <- senators[n]
-nCores <- min(1,round(parallel::detectCores()/1),length(unique(senators))/4)
+nCores <- min(round(parallel::detectCores()/1),length(unique(senators))/4)
 
 print(str_c(length(n)," Tweets"))
 print(str_c("Using ",nCores," cores."))
@@ -36,7 +36,18 @@ print(str_c("Using ",nCores," cores."))
 #rm(senTweets116_2020.dfm_trimmed,small_n)
 
 #set parameters
-maxiter <- 1000; nC <- 4; nT <- 30; seed <- 196
+nC_vec <- c(2,4,6,8)
+nT_vec <- c(20,30,40,60)
+
+param_mat <- expand.grid(nC_vec,nT_vec)
+
+#get slurm id 
+if(Sys.getenv('SLURM_ARRAY_TASK_ID') != ""){
+  slurm_id <- as.integer(Sys.getenv('SLURM_ARRAY_TASK_ID'))
+} else slurm_id <- 1
+
+nC <- param_mat[slurm_id,1]; nT <- param_mat[slurm_id,2];
+maxiter <- 1000;  seed <- 196
 
 x <- stldac_vb(users=senators,dw=dw_mat,nT = nT,nC = nC,tol = .01,seed = seed,maxiter = 1000,n.cores=nCores)
 gc()
