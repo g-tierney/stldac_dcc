@@ -11,4 +11,5 @@
 
 
 module load R
-Rscript scripts/vb_senTweets_execute_JanMay.R
+R CMD BATCH --no-restore --no-save scripts/vb_senTweets_execute_JanMay.R logs/rlog_vb_SenTweets_JanMay_$SLURM_ARRAY_TASK_ID.Rout
+
