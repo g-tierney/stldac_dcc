@@ -23,7 +23,7 @@ small_n <- senTweets116_2020.dfm_trimmed@docvars %>%
   select(docname_)
 
 #switch n values to choose sample or full data
-n <-   which(senTweets116_2020.dfm_trimmed@docvars$docname_ %in% small_n$docname_) #1:nrow(dw_mat) # 
+n <- 1:nrow(dw_mat) # which(senTweets116_2020.dfm_trimmed@docvars$docname_ %in% small_n$docname_) #
 dw_mat <- dw_mat[n,]
 senators <- senators[n]
 nCores <- min(round(parallel::detectCores()/1),length(unique(senators))/4)
@@ -46,8 +46,9 @@ if(Sys.getenv('SLURM_ARRAY_TASK_ID') != ""){
 
 nC <- param_mat[slurm_id,1]; nT <- param_mat[slurm_id,2];
 maxiter <- 1000;  seed <- 196
+print(str_c("Using ",nC," clusters and ",nT," topics"))
 
-x <- stldac_vb(users=senators,dw=dw_mat,nT = nT,nC = nC,tol = .01,seed = seed,maxiter = 1000,n.cores=nCores)
+x <- stldac_vb(users=senators,dw=dw_mat,nT = nT,nC = nC,tol = .01,seed = seed,maxiter = maxiter,n.cores=nCores)
 gc()
 
 saveRDS(x,file = str_c("/work/gt83/stldac_dcc/output/vb_",nC,"C_",nT,"T_",maxiter,"Max_",nCores,"Core_",seed,"seed_JanMay.rds"))
