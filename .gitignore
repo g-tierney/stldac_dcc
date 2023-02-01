@@ -5,3 +5,6 @@ scripts/archive/*
 stldac_dcc.Rproj
 .Rhistory
 *.DS_Store
+reviews/*
+*.docx
+*.Rdata
