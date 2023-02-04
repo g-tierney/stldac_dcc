@@ -35,7 +35,7 @@ rm(senTweets116_2020.dfm_trimmed,small_n)
 
 #set parameters
 nC_vec <- c(2,4,6,8)
-nT_vec <- c(20,30,40,60)
+nT_vec <- 50 #c(20,30,40,50)
 
 param_mat <- expand.grid(nC_vec,nT_vec)
 
