@@ -4,7 +4,7 @@
 #SBATCH -N1
 #SBATCH -c1
 #SBATCH --mem=150G
-#SBATCH -o logs/log_vb_SenTweets_JanMay_50T_%A.txt
+#SBATCH -o logs/log_vb_SenTweets_JanMay_%A.txt
 #SBATCH --array=1-12
 #SBATCH --mail-user=gt83@duke.edu
 #SBATCH --mail-type=END,FAIL
