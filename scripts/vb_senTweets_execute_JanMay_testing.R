@@ -1,0 +1,58 @@
+rm(list=ls())
+
+print(parallel::detectCores())
+
+library(tidyverse)
+library(quanteda)
+library(stopwords)
+
+source("scripts/setup.R")
+source("scripts/helper_functions.R")
+source("scripts/vb_stldac_functions.R")
+source("scripts/vb_implementation.R")
+
+#load('senatorTweet_data/rinputs.Rdata')
+dfm <- readRDS("senatorTweet_data/final_dfm.rds")
+dw_mat <- convert(dfm,to="matrix")
+senators <- dfm@docvars$screen_name
+
+#seed set for creating train and test data
+set.seed(196)
+training <- dfm@docvars %>% 
+  group_by(screen_name) %>% 
+  sample_n(pmax(4,round(n()*.9,0))) %>% 
+  select(docname_)
+testing <- dfm@docvars %>% 
+  filter(!docname_ %in% training$docname_) %>% 
+  select(screen_name,docname_)
+
+#switch n values to choose sample or full data
+n <- which(dfm@docvars$docname_ %in% training$docname_) # 1:nrow(dw_mat) # 
+dw_mat <- dw_mat[n,]
+senators <- senators[n]
+nCores <- min(round(parallel::detectCores()/1),length(unique(senators))/4)
+
+print(str_c(length(n)," Tweets"))
+print(str_c("Using ",nCores," cores."))
+
+rm(dfm,small_n)
+
+#set parameters
+nC_vec <- c(2,4,6,8)
+nT_vec <- c(20,30,40)
+
+param_mat <- expand.grid(nC_vec,nT_vec)
+
+#get slurm id 
+if(Sys.getenv('SLURM_ARRAY_TASK_ID') != ""){
+  slurm_id <- as.integer(Sys.getenv('SLURM_ARRAY_TASK_ID'))
+} else slurm_id <- 1
+
+nC <- param_mat[slurm_id,1]; nT <- param_mat[slurm_id,2];
+maxiter <- 1000;  seed <- 196
+print(str_c("Using ",nC," clusters and ",nT," topics"))
+
+x <- stldac_vb(users=senators,dw=dw_mat,nT = nT,nC = nC,tol = .05,seed = seed,maxiter = maxiter,n.cores=nCores)
+gc()
+
+saveRDS(x,file = str_c("/work/gt83/stldac_dcc/output/vb_",nC,"C_",nT,"T_",maxiter,"Max_",nCores,"Core_",seed,"seed_JanMay_finaldfm_training.rds"))
